@@ -10,6 +10,6 @@ namespace webapi.Servico
             
         }
 
-        public DbSet<Material> Materiais { get; set; }
+        public DbSet<Administrador> Administradores { get; set; }
     }
 }

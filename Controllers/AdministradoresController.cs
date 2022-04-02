@@ -9,27 +9,27 @@ using webapi.Servico;
 namespace webapi.Controllers
 {
     [ApiController]
-    [Route("materiais/api")]
-    public class MateriaisController : Controller
+    [Route("administradores/api")]
+    public class AdministradoresController : Controller
     {
         private readonly DbContexto _context;
 
         private const int QUANTIDADE_POR_PAGINA = 3;
 
-        public MateriaisController(DbContexto context)
+        public AdministradoresController(DbContexto context)
         {
             _context = context;
         }
 
-        // GET: Materiais
-        [HttpGet("listar-materiais")]
+        // GET: Administradores
+        [HttpGet("listar-administradores")]
         public async Task<IActionResult> Index(int page = 1)
         {
-            return StatusCode(200, await _context.Materiais.OrderBy(x => x.Id).PaginateAsync(page, QUANTIDADE_POR_PAGINA));
+            return StatusCode(200, await _context.Administradores.OrderBy(x => x.Id).PaginateAsync(page, QUANTIDADE_POR_PAGINA));
         }
 
-        // GET: Materiais/Details/5
-        [HttpGet("detalhes-material/{id:int?}")]
+        // GET: Administradores/Details/5
+        [HttpGet("detalhes-administrador/{id:int?}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,48 +37,48 @@ namespace webapi.Controllers
                 return NotFound();
             }
 
-            var material = await _context.Materiais
+            var administrador = await _context.Administradores
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (material == null)
+            if (administrador == null)
             {
                 return NotFound();
             }
 
-            return Ok(material);
+            return Ok(administrador);
         }
 
-        // POST: Materiais/Create
+        // POST: Administradores/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("cadastrar-material")]
+        [HttpPost("cadastrar-administrador")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Material material)
+        public async Task<IActionResult> Create(Administrador administrador)
         {
-            _context.Add(material);
+            _context.Add(administrador);
             await _context.SaveChangesAsync();
-            return Ok(material);
+            return Ok(administrador);
         }
 
-        // POST: Materiais/Edit/5
+        // POST: Administradores/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPut("atualizar-material/{id:int}")]
+        [HttpPut("atualizar-administrador/{id:int}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Material material)
+        public async Task<IActionResult> Edit(int id, Administrador administrador)
         {
-            if (id != material.Id)
+            if (id != administrador.Id)
             {
                 return NotFound();
             }
 
             try
             {
-                _context.Update(material);
+                _context.Update(administrador);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MaterialExists(material.Id))
+                if (!MaterialExists(administrador.Id))
                 {
                     return NotFound();
                 }
@@ -88,27 +88,27 @@ namespace webapi.Controllers
                 }
             }
             
-            return Ok(material);
+            return Ok(administrador);
         }
 
-        // POST: Materiais/Delete/5
-        [HttpDelete("remover-material/{id:int}")]
+        // POST: Administradores/Delete/5
+        [HttpDelete("remover-administrador/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var material = await _context.Materiais.FindAsync(id);
+            var administrador = await _context.Administradores.FindAsync(id);
             
-            if(material == null)
-                return NotFound("material não encontrado");
+            if(administrador == null)
+                return NotFound("administrador não encontrado");
 
-            _context.Materiais.Remove(material);
+            _context.Administradores.Remove(administrador);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
         private bool MaterialExists(int id)
         {
-            return _context.Materiais.Any(e => e.Id == id);
+            return _context.Administradores.Any(e => e.Id == id);
         }
     }
 }

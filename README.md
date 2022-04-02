@@ -1,7 +1,7 @@
 # Comandos iniciais:
 ``` bash
-  mkdir webapi-materiais
-  cd webapi-materiais
+  mkdir webapi-adminstradores
+  cd webapi-adminstradores
   dotnet new webapi
 ```
 
@@ -16,7 +16,7 @@
   git init
   git add .
   git commit -m "Iniciando projeto"
-  git remote add origin git@github.com:Rafael955/aula-desafio-21dias-materiais.git
+  git remote add origin git@github.com:Rafael955/aula-desafio-21dias-administradores.git
   git branch -M main
   git push -u origin main
 ```
@@ -33,7 +33,7 @@
 # Comandos para migração para criar:
 ``` bash
 dotnet tool install --global dotnet-ef
-dotnet ef migrations add MateriaisAdd
+dotnet ef migrations add AdmAdd
 dotnet ef database update
 ```
 

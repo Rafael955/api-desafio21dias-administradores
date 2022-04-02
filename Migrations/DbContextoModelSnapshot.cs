@@ -18,7 +18,7 @@ namespace webapi.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("webapi.Models.Material", b =>
+            modelBuilder.Entity("webapi.Models.Administrador", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -26,10 +26,11 @@ namespace webapi.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AlunoId")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("aluno_id");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("email");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -37,9 +38,15 @@ namespace webapi.Migrations
                         .HasColumnType("varchar(150)")
                         .HasColumnName("nome");
 
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("senha");
+
                     b.HasKey("Id");
 
-                    b.ToTable("materiais");
+                    b.ToTable("administradores");
                 });
 #pragma warning restore 612, 618
         }
