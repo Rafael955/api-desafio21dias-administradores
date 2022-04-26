@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapi.Models;
 using webapi.Servico;
+using webapi_administradores.ModelViews;
 
 namespace webapi.Controllers
 {
@@ -25,7 +26,43 @@ namespace webapi.Controllers
         [HttpGet("listar-administradores")]
         public async Task<IActionResult> Index(int page = 1)
         {
-            return StatusCode(200, await _context.Administradores.OrderBy(x => x.Id).PaginateAsync(page, QUANTIDADE_POR_PAGINA));
+            return StatusCode(200, await _context.Administradores.Select(x => new
+            {
+                Id = x.Id,
+                Nome = x.Nome,
+                Email =x.Email
+            }).OrderBy(x => x.Id).PaginateAsync(page, QUANTIDADE_POR_PAGINA));
+        }
+
+         // POST: Administradores/Login
+        [HttpPost("administrador/login")]
+        public async Task<IActionResult> Login([FromBody]AdmLoginView admin)
+        {
+            if (string.IsNullOrEmpty(admin.Email) || string.IsNullOrEmpty(admin.Senha))
+            {
+                return StatusCode(400, new
+                {
+                    Mensagem = "É obrigatório passar e-mail e senha"
+                });
+            }
+
+            var administrador = await _context.Administradores
+                .FirstOrDefaultAsync(a => a.Email == admin.Email && a.Senha == admin.Senha);
+
+            if (administrador != null)
+            {
+                return StatusCode(200, new
+                {
+                    Id = administrador.Id,
+                    Nome = administrador.Nome,
+                    Email = administrador.Email
+                });
+            }
+
+            return StatusCode(401, new
+            {
+                Mensagem = "Usuário ou Senha não permitido"
+            });
         }
 
         // GET: Administradores/Details/5
@@ -51,19 +88,23 @@ namespace webapi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("cadastrar-administrador")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Administrador administrador)
         {
             _context.Add(administrador);
             await _context.SaveChangesAsync();
-            return Ok(administrador);
+            
+            return StatusCode(200, new 
+            {
+                Id = administrador.Id,
+                Nome = administrador.Nome,
+                Email = administrador.Email
+            });
         }
 
         // POST: Administradores/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPut("atualizar-administrador/{id:int}")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Administrador administrador)
         {
             if (id != administrador.Id)
@@ -93,7 +134,6 @@ namespace webapi.Controllers
 
         // POST: Administradores/Delete/5
         [HttpDelete("remover-administrador/{id:int}")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var administrador = await _context.Administradores.FindAsync(id);

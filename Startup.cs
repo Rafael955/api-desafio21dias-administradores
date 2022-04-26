@@ -35,9 +35,9 @@ namespace webapi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { 
-                    Title = "Web API Desafio 21 dias", 
+                    Title = "Web API Desafio 21 dias - Administradores", 
                     Version = "v2",
-                    Description = "Primeira Web API feita com alunos no desafio 21 dias" 
+                    Description = "Primeira Web API feita para administradores no desafio 21 dias" 
                     });
             });
         }
