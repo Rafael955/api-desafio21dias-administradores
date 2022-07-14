@@ -24,7 +24,7 @@ namespace webapi.Controllers
 
         // GET: Administradores
         [HttpGet("listar-administradores")]
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index([FromQuery]int page = 1)
         {
             return StatusCode(200, await _context.Administradores.Select(x => new
             {
@@ -36,7 +36,7 @@ namespace webapi.Controllers
 
          // POST: Administradores/Login
         [HttpPost("administrador/login")]
-        public async Task<IActionResult> Login([FromBody]AdmLoginView admin)
+        public async Task<IActionResult> Login([FromBody] AdmLoginView admin)
         {
             if (string.IsNullOrEmpty(admin.Email) || string.IsNullOrEmpty(admin.Senha))
             {
@@ -76,6 +76,7 @@ namespace webapi.Controllers
 
             var administrador = await _context.Administradores
                 .FirstOrDefaultAsync(m => m.Id == id);
+                
             if (administrador == null)
             {
                 return NotFound();
@@ -88,12 +89,12 @@ namespace webapi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("cadastrar-administrador")]
-        public async Task<IActionResult> Create(Administrador administrador)
+        public async Task<IActionResult> Create([FromBody] Administrador administrador)
         {
             _context.Add(administrador);
             await _context.SaveChangesAsync();
             
-            return StatusCode(200, new 
+            return StatusCode(201, new 
             {
                 Id = administrador.Id,
                 Nome = administrador.Nome,
@@ -105,7 +106,7 @@ namespace webapi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPut("atualizar-administrador/{id:int}")]
-        public async Task<IActionResult> Edit(int id, Administrador administrador)
+        public async Task<IActionResult> Edit(int id, [FromBody] Administrador administrador)
         {
             if (id != administrador.Id)
             {
@@ -119,7 +120,7 @@ namespace webapi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MaterialExists(administrador.Id))
+                if (!AdministradorExists(administrador.Id))
                 {
                     return NotFound();
                 }
@@ -146,7 +147,7 @@ namespace webapi.Controllers
             return NoContent();
         }
 
-        private bool MaterialExists(int id)
+        private bool AdministradorExists(int id)
         {
             return _context.Administradores.Any(e => e.Id == id);
         }
